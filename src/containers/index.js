@@ -1,10 +1,13 @@
-import React from 'react';
+// import React from 'react';
 import { connect } from 'react-redux';
 import * as GameActions from '../actions/GameActions';
 import Game from "../components/Game";
+import { bindActionCreators } from 'redux';
 
 function mapStateToProps(state) {
-    return  { state };
+    return  {
+        gameReducer : state
+    };
 }
 
 function mapDispatchToProps(dispatch) {

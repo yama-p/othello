@@ -1,11 +1,18 @@
-import { createAction } from 'redux-actions';
+// import { createAction } from 'redux-actions';
 
-export const INPUT = 'INPUT';
+export const SQUARE_CLICK = 'SQUARE_CLICK';
+export const SKIP = 'SKIP';
 
-function createPayload(i) {
+export function actionSquareClick(index) {
     return {
-        index: i
+        type: SQUARE_CLICK,
+        index: index
     }
 }
 
-export const dispatchInput = createAction(INPUT, createPayload);
+export function actionSkip() {
+    return {
+        type: SKIP
+    }
+}
+

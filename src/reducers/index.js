@@ -1,41 +1,83 @@
-import {INPUT} from "../actions/GameActions";
+import {SQUARE_CLICK, SKIP} from "../actions/GameActions";
 
-const initialState = {
-    history: [{
-        squares: Array(64).fill(null)
-    }],
-    xIsNext: true,
-    stepNumber: 0
+const initialState = () => {
+    let state = {
+        history: [{
+            squares: Array(64).fill(null)
+        }],
+        xIsNext: true,
+        stepNumber: 0
+    };
+
+    state.history[0].squares[27] = '○';
+    state.history[0].squares[28] = '●';
+    state.history[0].squares[27+8] = '●';
+    state.history[0].squares[28+8] = '○';
+    return state;
 };
 
-export default function gameReducer(state = initialState, action) {
-    switch (action.type) {
-        case INPUT:
-            const history = this.state.history.slice(0, this.state.stepNumber+1);
-            const current = history[this.state.stepNumber];
+export default function gameReducer(state = initialState(), action) {
+    const { type, index } = action;
+
+    switch ( type ) {
+
+        case SQUARE_CLICK:
+        {
+            const history = state.history.slice(0, state.stepNumber+1);
+            const current = history[state.stepNumber];
             const squares = current.squares.slice();
-            const i = action.index;
+            const i = index;
+
+            console.log("SQUARE_CLICK");
 
             if (calculateWinner(squares) || squares[i]) {
-                return state;
+                return {
+                    history: state.history.slice(0, state.stepNumber),
+                    xIsNext: state.xIsNext,
+                    stepNumber: state.history.length
+                };
             }
 
-            squares[i] = this.state.xIsNext ? '●' : '○';
+            squares[i] = state.xIsNext ? '●' : '○';
             const changeSquares = calculateChange(squares, squares[i], i%8, i/8|0);
             if (squares.toString() === changeSquares.toString()) {
-                return state;
+                // Object.assign({}, state,
+                return {
+                    history: state.history.slice(0, state.stepNumber),
+                    xIsNext: state.xIsNext,
+                    stepNumber: state.history.length
+                };
             }
 
-            return Object.assign({}, state, {
+            return {
                 history: history.concat([{
                     squares: changeSquares
                 }]),
-                xIsNext: !this.state.xIsNext,
+                xIsNext: !state.xIsNext,
                 stepNumber: history.length
-            });
+            };
+        }
+
+        case SKIP:
+        {
+            const history = state.history.slice(0, state.stepNumber+1);
+            const current = history[state.stepNumber];
+            const squares = current.squares.slice();
+
+            console.log("SKIP");
+
+            return {
+                history: history.concat([{
+                    squares: squares
+                }]),
+                xIsNext: !state.xIsNext,
+                stepNumber: history.length
+            };
+        }
 
         default:
-            return state
+            console.log("default : " + state);
+            return state;
     }
 }
 
