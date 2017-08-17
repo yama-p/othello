@@ -3,15 +3,12 @@ import Board from './Board';
 
 class Game extends React.Component {
 
-    handleClick(i) {
-        this.props.actions.actionSquareClick(i);
+    handleClick(index) {
+        this.props.actions.actionSquareClick(index);
     }
 
     jumpTo(step) {
-        this.setState({
-            stepNumber: step,
-            xIsNext: (step % 2) ? false : true,
-        })
+        this.props.actions.actionJumpStep(step);
     }
 
     skip() {
@@ -63,8 +60,8 @@ class Game extends React.Component {
 export default Game
 
 function calculateWinner(squares) {
-    var x = 0;
-    var o = 0;
+    let x = 0;
+    let o = 0;
 
     for (let index = 0; index < 8*8; index++) {
         let val = squares[index];

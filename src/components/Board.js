@@ -7,9 +7,8 @@ class Board extends React.Component {
     }
 
     boardRowRender(rowNum, col) {
-        var arr = [];
-        var step = 0;
-        for (step = 0; step < rowNum; step++) {
+        let arr = [];
+        for (let step = 0; step < rowNum; step++) {
             arr.push(this.renderSquare(col*rowNum  + step));
         }
         return (
@@ -23,9 +22,8 @@ class Board extends React.Component {
         const rowNum = 8;
         const colNum = 8;
 
-        var arr = [];
-        var step = 0;
-        for (step = 0; step < colNum; step++) {
+        let arr = [];
+        for (let step = 0; step < colNum; step++) {
             arr.push(this.boardRowRender(rowNum, step));
         }
 

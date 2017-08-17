@@ -1,6 +1,5 @@
-// import React from 'react';
 import { connect } from 'react-redux';
-import * as GameActions from '../actions/GameActions';
+import * as actions from '../actions';
 import Game from "../components/Game";
 import { bindActionCreators } from 'redux';
 
@@ -11,7 +10,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-    return { actions: bindActionCreators(GameActions, dispatch) };
+    return { actions: bindActionCreators(actions, dispatch) };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Game);

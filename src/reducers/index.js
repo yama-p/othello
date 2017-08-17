@@ -1,4 +1,4 @@
-import {SQUARE_CLICK, SKIP} from "../actions/GameActions";
+import {SQUARE_CLICK, SKIP, JUMP_STEP} from "../actions/index";
 
 const initialState = () => {
     let state = {
@@ -8,7 +8,6 @@ const initialState = () => {
         xIsNext: true,
         stepNumber: 0
     };
-
     state.history[0].squares[27] = '○';
     state.history[0].squares[28] = '●';
     state.history[0].squares[27+8] = '●';
@@ -17,7 +16,7 @@ const initialState = () => {
 };
 
 export default function gameReducer(state = initialState(), action) {
-    const { type, index } = action;
+    const { type, index, step } = action;
 
     switch ( type ) {
 
@@ -26,27 +25,15 @@ export default function gameReducer(state = initialState(), action) {
             const history = state.history.slice(0, state.stepNumber+1);
             const current = history[state.stepNumber];
             const squares = current.squares.slice();
-            const i = index;
 
-            console.log("SQUARE_CLICK");
-
-            if (calculateWinner(squares) || squares[i]) {
-                return {
-                    history: state.history.slice(0, state.stepNumber),
-                    xIsNext: state.xIsNext,
-                    stepNumber: state.history.length
-                };
+            if (calculateWinner(squares) || squares[index]) {
+                return state;
             }
 
-            squares[i] = state.xIsNext ? '●' : '○';
-            const changeSquares = calculateChange(squares, squares[i], i%8, i/8|0);
+            squares[index] = state.xIsNext ? '●' : '○';
+            const changeSquares = calculateChange(squares, squares[index], index%8, index/8|0);
             if (squares.toString() === changeSquares.toString()) {
-                // Object.assign({}, state,
-                return {
-                    history: state.history.slice(0, state.stepNumber),
-                    xIsNext: state.xIsNext,
-                    stepNumber: state.history.length
-                };
+                return state;
             }
 
             return {
@@ -74,6 +61,13 @@ export default function gameReducer(state = initialState(), action) {
                 stepNumber: history.length
             };
         }
+
+      case JUMP_STEP:
+          return {
+            history: state.history.slice(),
+            stepNumber: step,
+            xIsNext: !(step % 2)
+          };
 
         default:
             console.log("default : " + state);
@@ -103,7 +97,7 @@ function calculateSquares(origin, squares, me, row, col, rowAdd, colAdd) {
 }
 
 function calculateChange(squares, me, row, col) {
-    var s = squares.slice();
+    let s = squares.slice();
     s = calculateSquares(s.slice(), s, me, row+1, col, 1, 0);     // →
     s = calculateSquares(s.slice(), s, me, row+1, col+1, 1, 1);   // ↘︎
     s = calculateSquares(s.slice(), s, me, row, col+1, 0, 1);     // ↓
@@ -116,8 +110,8 @@ function calculateChange(squares, me, row, col) {
 }
 
 function calculateWinner(squares) {
-    var x = 0;
-    var o = 0;
+    let x = 0;
+    let o = 0;
 
     for (let index = 0; index < 8*8; index++) {
         let val = squares[index];
