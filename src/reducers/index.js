@@ -7,6 +7,8 @@ const initialState = () => {
     }],
     xIsNext: true,
     stepNumber: 0,
+    white: 2,
+    black: 2,
     winner: null
   };
   state.history[0].squares[27] = '○';
@@ -36,7 +38,7 @@ export default function gameReducer(state = initialState(), action) {
         return state;
       }
 
-      const winner = calculateWinner(changeSquares);
+      const { black, white, winner } = calculateWinner(changeSquares);
 
       return {
         history: history.concat([{
@@ -44,6 +46,8 @@ export default function gameReducer(state = initialState(), action) {
         }]),
         xIsNext: !state.xIsNext,
         stepNumber: history.length,
+        white: white,
+        black: black,
         winner: winner
       };
 
@@ -54,6 +58,8 @@ export default function gameReducer(state = initialState(), action) {
         }]),
         xIsNext: !state.xIsNext,
         stepNumber: history.length,
+        white: state.white,
+        black: state.black,
         winner: state.winner
       };
 
@@ -62,6 +68,8 @@ export default function gameReducer(state = initialState(), action) {
         history: state.history.slice(),
         stepNumber: step,
         xIsNext: !(step % 2),
+        white: state.white,
+        black: state.black,
         winner: state.winner
       };
 
@@ -110,16 +118,17 @@ function calculateWinner(squares) {
 
   for (let index = 0; index < 8*8; index++) {
     let val = squares[index];
-    if (!val) {
-      return null;
-    } else if (val === '●') {
+    if (val === '●') {
       x++;
     } else if (val === '○') {
       o++;
-    } else {
-      return null;
     }
   }
 
-  return x === o ? 'Draw' : (x > o ? '●' : '○');
+  let winner = (x + o < 8*8) ? null : (x === o ? 'Draw' : (x > o ? '●' : '○'));
+  return {
+    black: x,
+    white: o,
+    winner: winner
+  };
 }

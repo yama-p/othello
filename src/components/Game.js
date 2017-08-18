@@ -16,7 +16,7 @@ class Game extends React.Component {
   }
 
   render() {
-    const { gameReducer : { history, xIsNext, stepNumber, winner } } = this.props;
+    const { gameReducer : { history, xIsNext, stepNumber, white, black, winner } } = this.props;
     const current = history[stepNumber];
 
     const moves = history.map((step, move) => {
@@ -32,9 +32,9 @@ class Game extends React.Component {
 
     let status;
     if (winner) {
-      status = '勝者: ' + winner;
+      status = '勝者: ' + winner + '   : ●=' + black + ' ○=' + white;
     } else {
-      status = '順番: ' + (xIsNext ? '●' : '○');
+      status = '順番: ' + (xIsNext ? '●' : '○') + '   : ●=' + black + ' ○=' + white;
     }
 
     return (
