@@ -5,21 +5,21 @@ export const SKIP = 'SKIP';
 export const JUMP_STEP = 'JUMP_STEP';
 
 export function actionSquareClick(index) {
-    return {
-        type: SQUARE_CLICK,
-        index: index
-    }
+  return {
+    type: SQUARE_CLICK,
+    index: index
+  }
 }
 
 export function actionSkip() {
-    return {
-        type: SKIP
-    }
+  return {
+    type: SKIP
+  }
 }
 
 export function actionJumpStep(step) {
-    return {
-        type: JUMP_STEP,
-        step: step
-    }
+  return {
+    type: JUMP_STEP,
+    step: step
+  }
 }

@@ -4,13 +4,13 @@ import Game from "../components/Game";
 import { bindActionCreators } from 'redux';
 
 function mapStateToProps(state) {
-    return  {
-        gameReducer : state
-    };
+  return  {
+    gameReducer : state
+  };
 }
 
 function mapDispatchToProps(dispatch) {
-    return { actions: bindActionCreators(actions, dispatch) };
+  return { actions: bindActionCreators(actions, dispatch) };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Game);
